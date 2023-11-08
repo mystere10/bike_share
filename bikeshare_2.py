@@ -129,13 +129,18 @@ def get_filters():
                     # Get user input for month (all, january, february, ... , june).
                     month = input("Which month you would like to filter by\n")
                     if month.title() in MONTH_DICT.values():
-                        return month, None
+                        return month, None, None
                     
                 if period == 'day':
                     # Get user input for day of week (all, monday, tuesday, ... sunday).
                     day = input("Which day you would like to filter by\n")
                     if day.title() in DAYS_DICT.values():
-                        return None, day
+                        return None, day, None
+                
+                if period == 'not at all':
+                    # Get user input for day of week (all, monday, tuesday, ... sunday).
+                    all_data = 'all'
+                    return None, None, all_data
                     
             except Exception as e:
                 print("Invalid data input", e) 
@@ -145,14 +150,14 @@ def get_filters():
             # Get user input for city (chicago, new york city, washington).
             city = input("Would you like to see data for Chicago, New York, or Washington?\n").strip().lower()
             if city in CITY_DATA:
-                month, day = get_month_and_day()
-                return city, month, day
+                month, day, all_data = get_month_and_day()
+                return city, month, day, all_data
             else:
                 print("Invalid choice. Please enter 'chicago', 'new york city' or 'washington'.")
         except Exception as e:
             print("Invalid data input", e) 
     
-    return city, month, day
+    return city, month, day, all_data
 
 
 def load_data(city, month, day):
@@ -350,17 +355,18 @@ def main():
     """The main function that executes all other functions."""
 
     while True:
-        city, month, day = get_filters()
+        city, month, day, all_data = get_filters()
         df = load_data(city, month, day)
         
-        time_stats(df)
-        station_stats(df)
-        trip_duration_stats(df)
-        user_stats(df)
-        
-        display = input("Do you want to display all the data? Enter 'yes' or 'no': ")
-        if display.lower() == 'yes':
-            display_data(df)
+        if all_data is None:
+            time_stats(df)
+            station_stats(df)
+            trip_duration_stats(df)
+            user_stats(df)
+        else: 
+            display = input("Do you want to display all the data? Enter 'yes' or 'no': ")
+            if display.lower() == 'yes' or all_data is not None:
+                display_data(df)
 
         restart = input('\nWould you like to restart? Enter yes or no.\n')
         if restart.lower() != 'yes':
