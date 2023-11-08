@@ -90,11 +90,11 @@ def display_data(df):
         print(display_df)
         
         if current_page * 5 + 5 < total_rows:
-            user_input = input("Press Enter to display the next 5 rows or type 'exit' to stop: ")
+            user_input = input("Do you want to see the next 5 rows of data: ")
         else:
-            user_input = input("All data has been displayed. Type 'exit' to stop: ")
+            user_input = input("All data has been displayed. Type 'no' to stop: ")
         
-        if user_input.lower() == 'exit':
+        if user_input.lower() == 'no':
             break
         
         current_page += 1
@@ -363,10 +363,10 @@ def main():
             station_stats(df)
             trip_duration_stats(df)
             user_stats(df)
-        else: 
-            display = input("Do you want to display all the data? Enter 'yes' or 'no': ")
-            if display.lower() == 'yes' or all_data is not None:
-                display_data(df)
+        
+        display = input("Do you want to see 5 rows of data? Enter 'yes' or 'no': ")
+        if display.lower() == 'yes' or all_data is not None:
+            display_data(df)
 
         restart = input('\nWould you like to restart? Enter yes or no.\n')
         if restart.lower() != 'yes':
